@@ -289,18 +289,19 @@
   // ========== CONFIG YOU CAN EDIT ==========
   const CONFIG = {
     // Q2 photo: put an image file in the same GitHub repo (e.g., "photo.jpg") and update this.
-    photoSrc: "photo.jpg", // <-- replace with your filename (e.g., "kyoto.jpg")
-    photoAlt: "A photo to guess the location",
+    photoSrc: "herphoto.jpeg", // <-- replace with your filename (e.g., "kyoto.jpg")
+    photoAlt: "A photo to guess",
 
     // Q2 options: set your correct answer text EXACTLY to one of the options below.
-    photoQuestion: "Where was this photo clicked? 📸",
+    photoQuestion: "We obviously know who this stunning woman is…<br>but which description fits her best? 📸",
     photoOptions: [
-      "Kyoto, Japan",
-      "Lake Tahoe, California",
-      "Golden Gate Park, San Francisco",
-      "Santorini, Greece"
+      "Smart + Beautiful",
+      "Graceful + Gorgeous",
+      "Witty + Sexy",
+      "Radiant + Magnetic",
+      "All of the above"
     ],
-    photoCorrect: "Kyoto, Japan"
+    photoCorrect: "All of the above"
   };
 
   // ========== STATE ==========
@@ -371,29 +372,29 @@
     contentEl.innerHTML = "";
     const q = document.createElement("div");
     q.className = "q";
-    q.textContent = "When did I fall in love with you?";
+    q.textContent = "When do you think I fell in love with you?";
     contentEl.appendChild(q);
 
     const choices = document.createElement("div");
     choices.className = "choices";
 
     const options = [
-      "After a careful multi-year cost–benefit analysis 😌",
-      "When you laughed at my dumb joke 😭",
+      "When I took care of you when you got drunk 😌",
+      "When we got talking 😌",
       "The moment I laid my eyes on you 😍",
-      "When you stole my fries and I still forgave you 🍟"
+      "When you smiled at me 😌"
     ];
 
     options.forEach(opt => {
       const isCheesyCorrect = (opt === "The moment I laid my eyes on you 😍");
       choices.appendChild(button(opt, isCheesyCorrect ? "correct" : "hmm", () => {
         if(isCheesyCorrect){
-          showModal("You know how cheesy I am.", "🧀", () => {
+          showModal("You know how cheesy I am!", "🧀", () => {
             step = 2;
             render();
           });
         } else {
-          showModal("Nice try 😏 But nope — try another one.", "💭");
+          showModal("Sure, this too...but — try another one 😏", "💭");
         }
       }));
     });
@@ -403,7 +404,7 @@
 
   // ========== Q2 ==========
   function renderQ2(){
-    miniNoteEl.textContent = "Hint: trust your memory 😉";
+    miniNoteEl.textContent = "Let's see whether you know this person well.. 😉";
 
     contentEl.innerHTML = "";
 
@@ -433,12 +434,12 @@
       const isCorrect = (opt === CONFIG.photoCorrect);
       choices.appendChild(button(opt, isCorrect ? "🌍" : "🤔", () => {
         if(isCorrect){
-          showModal("❤️", "Correct!", () => {
+          showModal("❤️", "That’s right. She’s the complete package.", () => {
             step = 3;
             render();
           });
         } else {
-          showModal("Not this one 😅 Try again.", "📍");
+          showModal("Not this one, Try again.", "-");
         }
       }));
     });
@@ -467,7 +468,7 @@
     opts.forEach(o => {
       choices.appendChild(button(o.label, o.badge, () => {
         // Both lead to the same cheeky message as requested
-        const line = `${o.label} = Rajat! I knew you would admit it that I love you more.`;
+        const line = `${o.label} = Exactly! Rajat loves you more. I knew you'd admit it as some point.`;
         showModal(line, "😏", () => {
           step = 4;
           render();
@@ -486,7 +487,7 @@
 
     const q = document.createElement("div");
     q.className = "q";
-    q.textContent = "Will you be my valentine?";
+    q.textContent = "Raveena, will you be my valentine?";
     contentEl.appendChild(q);
 
     const choices = document.createElement("div");
@@ -496,7 +497,7 @@
     allYes.forEach(opt => {
       choices.appendChild(button(opt, "✅", () => {
         startConfetti();
-        showModal("I knew it! I love you my sweat pea.", "🎉", () => {
+        showModal("I knew it! I love you so much my sweat pea! Thank you for making the most luckiest husband in this world!", "🎉", () => {
           // Replace card content with a final screen
           contentEl.innerHTML = "";
           const final = document.createElement("div");
