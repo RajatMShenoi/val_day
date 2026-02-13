@@ -468,7 +468,7 @@
     opts.forEach(o => {
       choices.appendChild(button(o.label, o.badge, () => {
         // Both lead to the same cheeky message as requested
-        const line = `${o.label} = Exactly! Rajat loves you more. I knew you'd admit it as some point.`;
+        const line = `${o.label} = Rajat! Exactly! I knew you'd admit it as some point.`;
         showModal(line, "😏", () => {
           step = 4;
           render();
