@@ -228,6 +228,23 @@
       margin: 0;
     }
 
+    .videoWrap{
+      margin-top: 14px;
+      text-align:center;
+    }
+    .pressPlay{
+      margin: 10px 0 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    video{
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid rgba(255,59,122,.18);
+      box-shadow: 0 10px 24px rgba(0,0,0,.08);
+      background:#000;
+    }
+
     /* Tiny floating hearts background (subtle) */
     .floaters{
       position:absolute;
@@ -288,12 +305,12 @@
 <script>
   // ========== CONFIG YOU CAN EDIT ==========
   const CONFIG = {
-    // Q2 photo: put an image file in the same GitHub repo (e.g., "photo.jpg") and update this.
-    photoSrc: "herphoto.jpeg", // <-- replace with your filename (e.g., "kyoto.jpg")
+    // Q2 photo (her photo)
+    photoSrc: "herphoto.jpeg",
     photoAlt: "A photo to guess",
 
-    // Q2 options: set your correct answer text EXACTLY to one of the options below.
-    photoQuestion: "We obviously know who this stunning woman is…<br>but which description fits her best? 📸",
+    // Q2 text + options
+    photoQuestion: "We obviously know who this stunning woman is…<br>but which description fits her best?",
     photoOptions: [
       "Smart + Beautiful",
       "Graceful + Gorgeous",
@@ -301,7 +318,10 @@
       "Radiant + Magnetic",
       "All of the above"
     ],
-    photoCorrect: "All of the above"
+    photoCorrect: "All of the above",
+
+    // Final video (place valentine.mp4 in repo root)
+    finalVideoSrc: "valentine.mp4"
   };
 
   // ========== STATE ==========
@@ -404,13 +424,14 @@
 
   // ========== Q2 ==========
   function renderQ2(){
-    miniNoteEl.textContent = "Let's see whether you know this person well.. 😉";
+    miniNoteEl.textContent = "Let’s see whether you know this person well.. 😉";
 
     contentEl.innerHTML = "";
 
     const q = document.createElement("div");
     q.className = "q";
-    q.textContent = CONFIG.photoQuestion;
+    // IMPORTANT: innerHTML so <br> renders correctly
+    q.innerHTML = CONFIG.photoQuestion;
     contentEl.appendChild(q);
 
     const photo = document.createElement("div");
@@ -424,7 +445,7 @@
 
     const hint = document.createElement("div");
     hint.className = "hint";
-    hint.textContent = "Tap the right place to unlock a surprise.";
+    hint.textContent = "Tap the right option to unlock a surprise.";
     contentEl.appendChild(hint);
 
     const choices = document.createElement("div");
@@ -432,14 +453,14 @@
 
     CONFIG.photoOptions.forEach(opt => {
       const isCorrect = (opt === CONFIG.photoCorrect);
-      choices.appendChild(button(opt, isCorrect ? "🌍" : "🤔", () => {
+      choices.appendChild(button(opt, isCorrect ? "✨" : "🤔", () => {
         if(isCorrect){
-          showModal("❤️", "That’s right. She’s the complete package.", () => {
+          showModal("That’s right. She’s the complete package.", "❤️", () => {
             step = 3;
             render();
           });
         } else {
-          showModal("Not this one, Try again.", "-");
+          showModal("Not this one… try again 😉", "😌");
         }
       }));
     });
@@ -467,8 +488,7 @@
 
     opts.forEach(o => {
       choices.appendChild(button(o.label, o.badge, () => {
-        // Both lead to the same cheeky message as requested
-        const line = `${o.label} = Rajat! Exactly! I knew you'd admit it as some point.`;
+        const line = `${o.label} = Exactly! Rajat loves you more. I knew you'd admit it at some point.`;
         showModal(line, "😏", () => {
           step = 4;
           render();
@@ -497,22 +517,37 @@
     allYes.forEach(opt => {
       choices.appendChild(button(opt, "✅", () => {
         startConfetti();
-        showModal("I knew it! I love you so much my sweat pea! Thank you for making the most luckiest husband in this world!", "🎉", () => {
-          // Replace card content with a final screen
-          contentEl.innerHTML = "";
-          const final = document.createElement("div");
-          final.className = "bigLove";
-          final.innerHTML = `
-            <div class="emoji">💖🎊💖</div>
-            <p class="msg"><strong>Happy Valentine’s Day.</strong><br/>You’re my favorite person forever.</p>
-          `;
-          contentEl.appendChild(final);
-          miniNoteEl.textContent = "Made with love — Rajat";
-        });
+        showModal(
+          "I knew it! I love you so much my sweet pea! Thank you for making me the luckiest husband in this world!",
+          "🎉",
+          () => showFinalScreen()
+        );
       }));
     });
 
     contentEl.appendChild(choices);
+  }
+
+  function showFinalScreen(){
+    contentEl.innerHTML = "";
+
+    const final = document.createElement("div");
+    final.className = "bigLove";
+    final.innerHTML = `
+      <div class="emoji">💖🎊💖</div>
+      <p class="msg"><strong>Happy Valentine’s Day.</strong><br/>You’re my favorite person forever.</p>
+
+      <div class="videoWrap">
+        <div class="pressPlay">Press play 🎬</div>
+        <video controls playsinline preload="metadata">
+          <source src="${CONFIG.finalVideoSrc}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    `;
+    contentEl.appendChild(final);
+
+    miniNoteEl.textContent = "Made with love — Rajat";
   }
 
   // ========== CONFETTI (Canvas) ==========
@@ -605,10 +640,9 @@
     resizeCanvas();
     canvas.classList.add("show");
     confettiActive = true;
-    pieces = makePieces(200);
+    pieces = makePieces(220);
     if(rafId) cancelAnimationFrame(rafId);
     tick();
-    // keep it running; you can stop it later if you want
   }
 
   // ========== SUBTLE FLOATING HEARTS BACKGROUND ==========
